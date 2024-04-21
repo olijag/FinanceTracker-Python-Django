@@ -5,3 +5,7 @@ body {
     background-color: #121212;
     color: white;
 }
+
+.bg-custom-lightgrey{
+    background-color: #3f3f3f;
+}

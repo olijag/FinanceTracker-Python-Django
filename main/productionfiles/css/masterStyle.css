@@ -1,18 +1,1 @@
-@media (max-width: 768px) {
-    .bg-dark {
-        min-height: 100vh; /* Full height on smaller screens */
-    }
-}
 
-.nav-link:hover {
-    color: #5e43f3; /* Bootstrap primary blue as text color on hover */
-    transition: all 0.3s ease-in-out; /* Smooth transition for hover effect */
-}
-
-.bg-custom-darkgrey {
-    background-color: #121212;
-}
-
-.bg-custom-lighterDarkGrey {
-    background-color: #282828;
-}

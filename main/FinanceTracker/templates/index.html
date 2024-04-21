@@ -4,9 +4,58 @@
 {% block title %} Dashboard {% endblock %}
 
 {% block extra_head %}
-    <link rel="stylesheet" href="{% static 'dashboardStyle.css' %}" >
+    <link rel="stylesheet" href="{% static 'css/dashboardStyle.css' %}" >
 {% endblock %}
 
 {% block content %}
-    <h1>Dashboard</h1>
+<div class="container-fluid mt-3">
+	<div class="row">
+		<div class="col-md-3">
+            <div class="info-box">
+                <h3 class="text-center color-info">Avaible Balance</h3>
+			    <h3 class="text-center">$ {{ balance }}</h3>
+            </div>	
+		</div>
+		<div class="col-md-9">
+			<div class="row">
+				<div class="col-md-6">
+                    <div class="info-box box-small">
+                        <h4 class="color-info">Income</h4>
+                        <h5>$ {{ income }}</h5>
+                    </div>
+				</div>
+				<div class="col-md-6">
+                    <div class="info-box box-small">
+                        <h4 class="color-info">Spendings</h4>
+					    <h5>$ {{ spendings }}</h5>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+            <div class="info-box">
+                <h4 class="color-info text-center">Net Worth</h4>
+                <h5 class="text-center">$ 23,500.00</h5>
+            </div>
+		</div>
+		<div class="col-md-9">
+            <div class="info-box" >
+                <h4 class="color-info">Income Goal</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>35%</h5>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <h5>$ 4,200 / 12,000</h5>
+                    </div>
+                </div>
+                
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped custom-progress-color progress-bar-animated" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+		</div>
+	</div>
+</div>
 {% endblock %}
