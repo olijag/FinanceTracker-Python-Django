@@ -14,6 +14,6 @@
     width: 50%;
 }
 
-.custom-progress-color {
-    background-color: #887AA6;
+.bg-custom-primary {
+    background-color: #887AA6 !important;
 }
