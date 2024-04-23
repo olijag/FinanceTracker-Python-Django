@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .models import Account, Transaction
+from .NewTransactionForm import NewTransactionForm
 
 # Global functions 
 def format_usa_balance(number):
@@ -31,16 +32,18 @@ def main(request):
 
 def testing(request):
     template = loader.get_template('testing.html')
+
     accounts = Account.objects.all().values()
-    
     main_account = Account.objects.get(name="main")
     transactions_main_account = main_account.transactions.all()
 
-
+    form = NewTransactionForm() 
+    
     context = {
          'accounts': accounts,
          'main_account': main_account,
          'transactions_main_account': transactions_main_account,
+         'form': form,
     }  
 
     return HttpResponse(template.render(context, request))
