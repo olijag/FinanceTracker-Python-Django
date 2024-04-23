@@ -7,6 +7,7 @@ def main(request):
     template = loader.get_template('index.html')
     
     def format_usa_balance(number):
+        number = float(number)
         return f"{number:,.2f}"
 
     spendings = 5326.00
