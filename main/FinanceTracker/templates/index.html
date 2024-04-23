@@ -72,34 +72,21 @@
             <div class="col-md-6">
                 <h4 class="text-center">Last Transactions</h4>
                 <ol class="list-group">
-                    <li class="list-group-item d-flex d-flex align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div><span class="fw-bold">Grocery</span><small> 26/04/2024</small></div>
-                            Bought juice and pasta for lunch
-                        </div>
-                        <span class="badge bg-danger rounded-pill">$ -32.79</span>
-                    </li>
-                    <li class="list-group-item d-flex d-flex align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div><span class="fw-bold">Other</span><small> 23/04/2024</small></div>
-                            From Danny for pizza 
-                        </div>
-                        <span class="badge bg-success rounded-pill">$ 10.98</span>
-                    </li>
-                    <li class="list-group-item d-flex d-flex align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div><span class="fw-bold">Salary</span><small> 21/04/2024</small></div>
-                            Job 
-                        </div>
-                        <span class="badge bg-success rounded-pill">$ 1,850.00</span>
-                    </li>
-                    <li class="list-group-item d-flex d-flex align-items-start">
-                        <div class="ms-2 me-auto">
-                            <div><span class="fw-bold">Grocery</span><small> 20/04/2024</small></div>
-                            Beer and pizza with friends 
-                        </div>
-                        <span class="badge bg-danger rounded-pill">$ -35.98</span>
-                    </li>
+                    {% for x in transactions_main_account %}
+                        <li class="list-group-item d-flex d-flex align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div><span class="fw-bold">{{x.title}}</span><small> {{x.date}}</small></div>
+                                {{x.notes}}
+                            </div>
+                            {% if x.amount < 0%}
+                                <span class="badge bg-danger rounded-pill">$ {{ x.amount }}</span>
+                            {% elif x.amount > 0 %}
+                                <span class="badge bg-success rounded-pill">$ {{ x.amount }}</span>
+                            {% else%}
+                                <span class="badge bg-secondary rounded-pill">$ {{ x.amount }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
                 </ol>
             </div>
             <div class="col-md-6">
