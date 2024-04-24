@@ -8,4 +8,6 @@ This all-in-one finance solution is ideal for personal finance management and go
 # For development notes:
 Color palette: https://colorffy.com/dark-theme-generator (Primary #382bf0, Dark color #121212)
 
+![DASHBOARD!](dashboard.png)
+
 ## Last update 24.04.2024
