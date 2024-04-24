@@ -4,16 +4,17 @@
 
 {% block content %}
 <div class="container">
+    <h3>Latest Transactions</h3>
     <ol class="list-group">
         {% for x in transactions_main_account %}
             <li class="list-group-item d-flex d-flex align-items-start">
                 <div class="ms-2 me-auto">
-                    <div><span class="fw-bold">{{x.title}}</span><small> {{x.date}}</small></div>
-                    {{x.notes}}
+                    <div><span class="fw-bold">{{ x.title }}</span><small> {{ x.date }}</small></div>
+                    {{ x.notes }}
                 </div>
-                {% if x.amount < 0%}
+                {% if x.amount < 0 %}
                     <span class="badge bg-danger rounded-pill">$ {{ x.amount }}</span>
-                {% elif x.amount > 0%}
+                {% elif x.amount > 0 %}
                     <span class="badge bg-success rounded-pill">$ {{ x.amount }}</span>
                 {% else %}
                     <span class="badge bg-secondary rounded-pill">$ {{ x.amount }}</span>
@@ -21,6 +22,11 @@
             </li>
         {% endfor %}
     </ol>
+    {% if transactions_main_account.count == 0 %}
+        <ol class="list-group">
+            <li class="list-group-item d-flex d-flex align-items-start">No transactions available.</li>
+        </ol>
+    {% endif %}
 </div>
 
 <br />
@@ -28,6 +34,7 @@
 
 <div class="container">
     <div class="row">
+        <h1>Create a New Transaction</h1>
         <form method="post" action="{% url 'testing' %}">
             {% csrf_token %}
             <table>
@@ -48,9 +55,5 @@
         </form>
     </div>
 </div>
-
-
-
-
 
 {% endblock %}

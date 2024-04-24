@@ -1,67 +1,70 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import Account, Transaction
 from .NewTransactionForm import NewTransactionForm
 
-# Global functions 
+
 def format_usa_balance(number):
-        number = float(number)
-        return f"{number:,.2f}"
+    number = float(number)
+    return f"{number:,.2f}"
 
-
-# Main
+# ==== Main
 def main(request):
     template = loader.get_template('index.html')
 
+    # Define variables 
     main_account = Account.objects.get(name="main")
-    transactions_main_account = main_account.transactions.all()    
+    transactions_main_account = main_account.transactions.all().order_by('-date')   
     balance = main_account.balance
 
-    spendings = 5326.00
-    income = 14074.00
+    # Define the http post request from the Add New Transaction form
+    if request.method == 'POST':
+        form = NewTransactionForm(request.POST)
+        if form.is_valid():
+            # No need to fetch main_account again if it's already fetched
+            new_transaction = form.save(commit=False)
+            new_transaction.account = main_account
+            new_transaction.save()
+            return redirect('main')  # Redirect to a success page, not the template itself
+    else:
+        form = NewTransactionForm()  # Initialize an unbound form for GET requests
     
 
     context = {
-        'main_account': main_account,
-        'transactions_main_account': transactions_main_account,
-        'balance': format_usa_balance(balance), 
+         'main_account': main_account,
+         'transactions_main_account': transactions_main_account,
+         'form': form,
     }
-    return HttpResponse(template.render(context, request))
+
+    return render(request, "index.html", context)
+
+
+     
 
 
 def testing(request):
     template = loader.get_template('testing.html')
 
     # Fetch accounts and main account
-    accounts = Account.objects.all().values()
     main_account = Account.objects.get(name="main")
+    transactions_main_account = main_account.transactions.all().order_by('-date')
 
-    # Initialize form outside the POST check to handle both GET and POST
-    form = NewTransactionForm() 
     if request.method == 'POST':
         form = NewTransactionForm(request.POST)
-        # Extract data from form directly
-        title = form.Meta['title']
-        amount = form.Meta['amount']
-        date = form.Meta['date']
-        notes = form.Meta['notes']
-
-        # Create and save new transaction
-        new_transaction = Transaction(title=title, amount=amount, date=date, notes=notes, account=main_account)
-        new_transaction.save()
-        return redirect('testing')
+        if form.is_valid():
+            # No need to fetch main_account again if it's already fetched
+            new_transaction = form.save(commit=False)
+            new_transaction.account = main_account
+            new_transaction.save()
+            return redirect('testing')  # Redirect to a success page, not the template itself
     else:
-        form = NewTransactionForm()
-
-    transactions_main_account = main_account.transactions.all()
-
+        form = NewTransactionForm()  # Initialize an unbound form for GET requests
 
     context = {
-         'accounts': accounts,
          'main_account': main_account,
          'transactions_main_account': transactions_main_account,
          'form': form,
     }  
 
-    return HttpResponse(template.render(context, request))
+    return render(request, "testing.html", context)

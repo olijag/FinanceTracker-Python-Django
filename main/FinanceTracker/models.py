@@ -14,7 +14,7 @@ class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=40)
     amount = models.DecimalField(max_digits=9, decimal_places=2)
-    date = models.DateField()
+    date = models.DateTimeField()
     notes = models.CharField(max_length=255)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
 
