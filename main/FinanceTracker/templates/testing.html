@@ -3,26 +3,50 @@
 {% block title %} Testing Page {% endblock %}
 
 {% block content %}
-<ol class="list-group">
-    {% for x in transactions_main_account %}
-        <li class="list-group-item d-flex d-flex align-items-start">
-            <div class="ms-2 me-auto">
-                <div><span class="fw-bold">{{x.title}}</span><small> {{x.date}}</small></div>
-                {{x.notes}}
-            </div>
-            {% if x.amount < 0%}
-                <span class="badge bg-danger rounded-pill">$ {{ x.amount }}</span>
-            {% elif x.amount > 0%}
-                <span class="badge bg-success rounded-pill">$ {{ x.amount }}</span>
-            {% else %}
-                <span class="badge bg-secondary rounded-pill">$ {{ x.amount }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ol>
+<div class="container">
+    <ol class="list-group">
+        {% for x in transactions_main_account %}
+            <li class="list-group-item d-flex d-flex align-items-start">
+                <div class="ms-2 me-auto">
+                    <div><span class="fw-bold">{{x.title}}</span><small> {{x.date}}</small></div>
+                    {{x.notes}}
+                </div>
+                {% if x.amount < 0%}
+                    <span class="badge bg-danger rounded-pill">$ {{ x.amount }}</span>
+                {% elif x.amount > 0%}
+                    <span class="badge bg-success rounded-pill">$ {{ x.amount }}</span>
+                {% else %}
+                    <span class="badge bg-secondary rounded-pill">$ {{ x.amount }}</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
+</div>
 
-<div class="row">
-    {{form}}
+<br />
+<br />
+
+<div class="container">
+    <div class="row">
+        <form method="post" action="{% url 'testing' %}">
+            {% csrf_token %}
+            <table>
+                {% for field in form %}
+                <tr>
+                    <!-- Label on one row -->
+                    <td>{{ field.label_tag }}</td>
+                </tr>
+                <tr>
+                    <!-- Field on the next row -->
+                    <td>{{ field }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td><button type="submit">Submit</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
 
 

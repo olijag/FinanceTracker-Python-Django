@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
 from .models import Account, Transaction
@@ -33,12 +33,30 @@ def main(request):
 def testing(request):
     template = loader.get_template('testing.html')
 
+    # Fetch accounts and main account
     accounts = Account.objects.all().values()
     main_account = Account.objects.get(name="main")
+
+    # Initialize form outside the POST check to handle both GET and POST
+    form = NewTransactionForm() 
+    if request.method == 'POST':
+        form = NewTransactionForm(request.POST)
+        # Extract data from form directly
+        title = form.Meta['title']
+        amount = form.Meta['amount']
+        date = form.Meta['date']
+        notes = form.Meta['notes']
+
+        # Create and save new transaction
+        new_transaction = Transaction(title=title, amount=amount, date=date, notes=notes, account=main_account)
+        new_transaction.save()
+        return redirect('testing')
+    else:
+        form = NewTransactionForm()
+
     transactions_main_account = main_account.transactions.all()
 
-    form = NewTransactionForm() 
-    
+
     context = {
          'accounts': accounts,
          'main_account': main_account,
