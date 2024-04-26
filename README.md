@@ -11,4 +11,4 @@ Color palette: https://colorffy.com/dark-theme-generator (Primary #382bf0, Dark 
 Current state of the app:
 ![DASHBOARD!](dashboard.png)
 
-## Last update 24.04.2024
+## Last update 26.04.2024
