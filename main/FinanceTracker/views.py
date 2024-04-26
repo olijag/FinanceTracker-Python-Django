@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from django.db.models import Sum
+from django.db.models import Sum, Case, When, IntegerField
+from django.core.paginator import Paginator
+
 
 # Models 
 from .models import Account, Transaction
@@ -18,15 +20,34 @@ def format_usa_balance(number): # This minimal functions makes it easy to conver
 
 # ==== Main
 def main(request):
-    template = loader.get_template('index.html')
-
     # Define variables 
     main_account = Account.objects.get(name="main")
     transactions_main_account = main_account.transactions.all().order_by('-date')   
+
+    # Setup pagination
+    paginator = Paginator(transactions_main_account, 5)  # Show 5 transactions per page
+    page_number = request.GET.get('page', 1)  # Get the page number from the query string
+    page_obj = paginator.get_page(page_number)
+
     
-    # Calculate total balance 
-    balance = transactions_main_account.aggregate(Sum('amount'))['amount__sum'] or 0 
-    balance = format_usa_balance(balance)
+    # Calculate total balance, income and spendings
+    aggregates = transactions_main_account.aggregate(
+        total_balance=Sum('amount'),
+        total_income=Sum(Case(
+            When(amount__gt=0, then='amount'),
+            default=0,
+            output_field=IntegerField()
+        )),
+        total_spendings=Sum(Case(
+            When(amount__lt=0, then='amount'),
+            default=0,
+            output_field=IntegerField()
+        ))
+    )
+
+    balance = format_usa_balance(aggregates['total_balance'] or 0)
+    income = format_usa_balance(aggregates['total_income'] or 0)
+    spendings = format_usa_balance(aggregates['total_spendings'] or 0)
 
     form = NewTransactionForm()
 
@@ -54,8 +75,11 @@ def main(request):
         context = {
             'main_account': main_account,
             'transactions_main_account': transactions_main_account,
+            'page_obj': page_obj,
             'form': form,
             'balance': balance,
+            'income': income,
+            'spendings': spendings,
         }  
         return render(request, "index.html", context)
 
@@ -101,5 +125,3 @@ def testing(request):
             'balance': balance,
         }  
         return render(request, "testing.html", context)
-
-

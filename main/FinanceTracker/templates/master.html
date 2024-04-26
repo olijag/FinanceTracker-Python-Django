@@ -17,11 +17,14 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-custom-lightgrey navbar-dark">
         <div class="container-fluid">
-            <a href="#" class="navbar-brand">Finance Tracker</a>
+            <a href="{% url 'main' %}" class="navbar-brand">Finance Tracker</a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbarText">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Dashboard</a>
+                        <a class="nav-link" href="{% url 'main' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'testing' %}">Testing</a>
                     </li>
                 </ul>
             </div>
