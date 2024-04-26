@@ -72,27 +72,27 @@
             <div class="col-md-6">
                 <h4 class="text-center">Last Transactions</h4>
                 <ol class="list-group">
-                    {% for x in transactions_main_account %}
+                    {% for transaction in page_obj %}
                         <li class="list-group-item d-flex align-items-start">
                             <div class="ms-2 me-auto">
-                                <div><span class="fw-bold">{{ x.title }}</span><small> {{ x.date }}</small></div>
-                                {{ x.notes }}
+                                <div><span class="fw-bold">{{ transaction.title }}</span><small> {{ transaction.date }}</small></div>
+                                {{ transaction.notes }}
                             </div>
                             <div class="d-flex flex-column">
                                 <div class="d-block">
-                                    {% if x.amount < 0 %}
-                                        <span class="badge rounded-pill bg-danger">$ {{ x.amount }}</span>
-                                    {% elif x.amount > 0 %}
-                                        <span class="badge rounded-pill bg-success">$ {{ x.amount }}</span>
+                                    {% if transaction.amount < 0 %}
+                                        <span class="badge rounded-pill bg-danger">$ {{ transaction.amount }}</span>
+                                    {% elif transaction.amount > 0 %}
+                                        <span class="badge rounded-pill bg-success">$ {{ transaction.amount }}</span>
                                     {% else %}
-                                        <span class="badge rounded-pill bg-secondary">$ {{ x.amount }}</span>
+                                        <span class="badge rounded-pill bg-secondary">$ {{ transaction.amount }}</span>
                                     {% endif %}
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-sm" title="Edit transaction"><i class="fa-solid fa-pen-to-square"></i></button>
                                     <form method="post" action="{% url 'main' %}">
                                         {% csrf_token %}
-                                        <input type="hidden" name="transaction_id" value="{{ x.id }}">
+                                        <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
                                         <button type="submit" class="btn btn-sm" name="action" value="delete_transaction" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
                                     </form>
                                 </div>
@@ -100,12 +100,17 @@
                         </li>
                     {% endfor %}
                 </ol>
-                {% if transactions_main_account.count == 0 %}
-                    <ol class="list-group">
-                        <li class="list-group-item d-flex d-flex align-items-start">No transactions available.</li>
-                    </ol>
+                {% if page_obj.has_other_pages %}
+                    <div class="text-center">
+                        {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-link">Previous</a>
+                        {% endif %}
+                        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-link">View more</a>
+                        {% endif %}
+                    </div>
                 {% endif %}
-                <p class="text-center">View more</p>
             </div>
             <div class="col-md-6">
                 <h4 class="text-center">Add new Transaction</h4>
