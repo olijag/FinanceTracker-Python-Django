@@ -3,22 +3,30 @@
 {% block title %} Testing Page {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-sm">
     <h3>Latest Transactions</h3>
     <ol class="list-group">
         {% for x in transactions_main_account %}
-            <li class="list-group-item d-flex d-flex align-items-start">
+            <li class="list-group-item d-flex align-items-start">
                 <div class="ms-2 me-auto">
                     <div><span class="fw-bold">{{ x.title }}</span><small> {{ x.date }}</small></div>
                     {{ x.notes }}
                 </div>
-                {% if x.amount < 0 %}
-                    <span class="badge bg-danger rounded-pill">$ {{ x.amount }}</span>
-                {% elif x.amount > 0 %}
-                    <span class="badge bg-success rounded-pill">$ {{ x.amount }}</span>
-                {% else %}
-                    <span class="badge bg-secondary rounded-pill">$ {{ x.amount }}</span>
-                {% endif %}
+                <div class="d-flex flex-column">
+                    <div class="d-block">
+                        {% if x.amount < 0 %}
+                            <span class="badge rounded-pill bg-danger">$ {{ x.amount }}</span>
+                        {% elif x.amount > 0 %}
+                            <span class="badge rounded-pill bg-success">$ {{ x.amount }}</span>
+                        {% else %}
+                            <span class="badge rounded-pill bg-secondary">$ {{ x.amount }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-sm" title="Edit transaction"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-sm" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
             </li>
         {% endfor %}
     </ol>
@@ -49,7 +57,7 @@
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td><button type="submit">Submit</button></td>
+                    <td><button type="submit" class="btn btn-primary">Submit</button></td>
                 </tr>
             </table>
         </form>
