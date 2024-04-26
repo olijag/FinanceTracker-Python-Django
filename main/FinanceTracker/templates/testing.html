@@ -24,7 +24,11 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-sm" title="Edit transaction"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-sm" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
+                        <form method="post" action="{% url 'testing' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="transaction_id" value="{{ x.id }}">
+                            <button type="submit" class="btn btn-sm" name="action" value="delete_transaction" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
+                        </form>
                     </div>
                 </div>
             </li>
@@ -57,7 +61,7 @@
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td><button type="submit" class="btn btn-primary">Submit</button></td>
+                    <td><button type="submit" class="btn btn-primary" name="action" value="add_new_transaction">Submit</button></td>
                 </tr>
             </table>
         </form>
