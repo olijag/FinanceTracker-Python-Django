@@ -90,16 +90,20 @@
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <button type="button" class="btn btn-sm" title="Edit transaction"><i class="fa-solid fa-pen-to-square"></i></button>
-                                    <button type="button" class="btn btn-sm" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
+                                    <form method="post" action="{% url 'main' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="transaction_id" value="{{ x.id }}">
+                                        <button type="submit" class="btn btn-sm" name="action" value="delete_transaction" title="Delete transaction"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
                                 </div>
                             </div>
                         </li>
                     {% endfor %}
                 </ol>
                 {% if transactions_main_account.count == 0 %}
-                <ol class="list-group">
-                    <li class="list-group-item d-flex d-flex align-items-start">No transactions available.</li>
-                </ol>
+                    <ol class="list-group">
+                        <li class="list-group-item d-flex d-flex align-items-start">No transactions available.</li>
+                    </ol>
                 {% endif %}
                 <p class="text-center">View more</p>
             </div>
@@ -120,8 +124,8 @@
                                 {% endfor %}
                             </div>
                         {% endfor %}
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                      </form>
+                        <button type="submit" class="btn btn-primary" name="action" value="add_new_transaction">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

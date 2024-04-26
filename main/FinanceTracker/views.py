@@ -21,27 +21,36 @@ def main(request):
     main_account = Account.objects.get(name="main")
     transactions_main_account = main_account.transactions.all().order_by('-date')   
     balance = main_account.balance
+    form = NewTransactionForm()
+
 
     # Define the http post request from the Add New Transaction form
     if request.method == 'POST':
-        form = NewTransactionForm(request.POST)
-        if form.is_valid():
-            # No need to fetch main_account again if it's already fetched
-            new_transaction = form.save(commit=False)
-            new_transaction.account = main_account
-            new_transaction.save()
-            return redirect('main')  # Redirect to a success page, not the template itself
+        if 'action' in request.POST:
+            if request.POST['action'] == 'add_new_transaction':
+                # Handling the action for adding a new transaction
+                addNewTransaction(request, main_account)
+                return redirect('main')  # Ensure to redirect after handling POST to avoid re-posting on refresh
+            elif request.POST['action'] == 'delete_transaction':
+                transaction_id = request.POST.get('transaction_id')  # Get transaction_id from POST data
+                if transaction_id:
+                    delete_transaction(request, transaction_id)
+                    return redirect('main')  # Redirect to the same page to reflect the deletion
+                else:
+                    return HttpResponse("Transaction ID not specified", status=400)
+            else:
+                return HttpResponse("No action specified", status=400)
+        else:
+            # This will handle any other POST that doesn't specify an action
+            return HttpResponse("Action not found", status=400)
     else:
-        form = NewTransactionForm()  # Initialize an unbound form for GET requests
-    
-
-    context = {
-         'main_account': main_account,
-         'transactions_main_account': transactions_main_account,
-         'form': form,
-    }
-
-    return render(request, "index.html", context)
+        # Handle GET request normally by displaying the page
+        context = {
+            'main_account': main_account,
+            'transactions_main_account': transactions_main_account,
+            'form': form,
+        }  
+        return render(request, "index.html", context)
 
 
      
