@@ -25,7 +25,7 @@ def main(request):
     transactions_main_account = main_account.transactions.all().order_by('-date')   
 
     # Setup pagination
-    paginator = Paginator(transactions_main_account, 5)  # Show 5 transactions per page
+    paginator = Paginator(transactions_main_account, 7)  # Show 5 transactions per page
     page_number = request.GET.get('page', 1)  # Get the page number from the query string
     page_obj = paginator.get_page(page_number)
 
